@@ -58,4 +58,3 @@ export function 札一覧生成() {
 	}
 	return 札一覧;
 }
-
