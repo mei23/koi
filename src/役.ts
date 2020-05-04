@@ -1,4 +1,4 @@
-import { 札 } from './cards';
+import { 札 } from './札';
 
 const 猪 = '萩種';
 const 鹿 = '紅葉種';
@@ -26,7 +26,7 @@ type 役情報 = {
 	カス: number;
 };
 
-export function 役情報取得(手札: 札[]): 役情報 {
+export function 完成役取得(手札: 札[]): 役情報 {
 	const 完成役: 役情報 = {
 		五光: 0,
 		四光: 0,
