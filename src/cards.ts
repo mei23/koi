@@ -1,68 +1,61 @@
-
-/** 月ごとのカードラインナップ */
-type Month = {
-	/** 月 */
-	month: number;
-	/** なし or 光 or 光(雨) */
-	hikari: '' | 'hikari' | 'ame';
-	/** 種あるか */
-	tane: boolean;
-	/** なし or 短冊 or 赤短 or 青短 */
-	tan: '' | 'tan' | 'akatan' | 'aotan';
-	/** カスの数 */
-	kasu: number;
+/** 月ごとの札情報 */
+type 月 = {
+	月: 月種別;
+	光: '' | '光' | '雨';
+	種: boolean;
+	短: '' | '短' | '赤短' | '青短';
+	カスの数: number;
 };
 
-type Card = {
+export type 札 = {
 	id: string;
-	month: number;
-	type: string;
-	kasuIndex?: number;
-}
+	月: 月種別;
+	種別: 札種別;
+	カス番号?: number;
+};
 
-const months: Month[] = [
-	{ month:  1, hikari: 'hikari', tane: false, tan: 'akatan', kasu: 2 },
-	{ month:  2, hikari: '',       tane: true,  tan: 'akatan', kasu: 2 },
-	{ month:  3, hikari: 'hikari', tane: false, tan: 'akatan', kasu: 2 },
-	{ month:  4, hikari: '',       tane: true,  tan: 'tan',    kasu: 2 },
-	{ month:  5, hikari: '',       tane: true,  tan: 'tan',    kasu: 2 },
-	{ month:  6, hikari: '',       tane: true,  tan: 'aotan',  kasu: 2 },
-	{ month:  7, hikari: '',       tane: true,  tan: 'tan',    kasu: 2 },
-	{ month:  8, hikari: 'hikari', tane: true,  tan: '',       kasu: 2 },
-	{ month:  9, hikari: '',       tane: true,  tan: 'aotan',  kasu: 2 },
-	{ month: 10, hikari: '',       tane: true,  tan: 'aotan',  kasu: 2 },
-	{ month: 11, hikari: 'ame',    tane: true,  tan: 'tan',    kasu: 1 },
-	{ month: 12, hikari: 'hikari', tane: false, tan: '',       kasu: 3 },
+type 月種別 = '松' | '梅' | '桜' | '藤' | '菖蒲' | '牡丹' | '萩' | '芒' | '菊' | '紅葉' | '柳' | '桐';
+type 札種別 = '光' | '雨' | '短' | '赤短' | '青短' | '種' | 'カス';
+
+const 月一覧: 月[] = [
+	{ 月: '松',   光: '光', 種: false, 短: '赤短', カスの数: 2 },
+	{ 月: '梅',   光: '',   種: true,  短: '赤短', カスの数: 2 },
+	{ 月: '桜',   光: '光', 種: false, 短: '赤短', カスの数: 2 },
+	{ 月: '藤',   光: '',   種: true,  短: '短',   カスの数: 2 },
+	{ 月: '菖蒲', 光: '',   種: true,  短: '短',   カスの数: 2 },
+	{ 月: '牡丹', 光: '',   種: true,  短: '青短', カスの数: 2 },
+	{ 月: '萩',   光: '',   種: true,  短: '短',   カスの数: 2 },
+	{ 月: '芒',   光: '光', 種: true,  短: '',     カスの数: 2 },
+	{ 月: '菊',   光: '',   種: true,  短: '青短', カスの数: 2 },
+	{ 月: '紅葉', 光: '',   種: true,  短: '青短', カスの数: 2 },
+	{ 月: '柳',   光: '雨', 種: true,  短: '短',   カスの数: 1 },
+	{ 月: '桐',   光: '光', 種: false, 短: '',     カスの数: 3 },
 ];
 
-export function buildCards() {
-	const cards: Card[] = [];
-	for(const m of months) {
+export function 札一覧生成() {
+	const 札一覧: 札[] = [];
+	for(const 月 of 月一覧) {
 		// 光
-		if (m.hikari) {
-			const card = { id: `${m.month}${m.hikari}`, month: m.month, type: m.hikari };
-			cards.push(card);
+		if (月.光) {
+			札一覧.push({ id: `${月.月}${月.光}`, 月: 月.月, 種別: 月.光 });
 		}
 
 		// 種
-		if (m.tane) {
-			const card = { id: `${m.month}tane`, month: m.month, type: 'tane' };
-			cards.push(card);
+		if (月.種) {
+			札一覧.push({ id: `${月.月}種`, 月: 月.月, 種別: '種' as 札種別 });
 		}
 
 		// 短冊
-		if (m.tan) {
-			const card = { id: `${m.month}${m.tan}`, month: m.month, type: m.tan };
-			cards.push(card);
+		if (月.短) {
+			札一覧.push({ id: `${月.月}${月.短}`, 月: 月.月, 種別: 月.短 });
 		}
 
-		if (m.kasu > 0) {
-			for(let i = 0; i < m.kasu; i++) {
-				const card = { id: `${m.month}kasu${i}`, month: m.month, type: 'kasu', kasuIndex: i };
-				cards.push(card);
+		if (月.カスの数 > 0) {
+			for(let 整数 = 0; 整数 < 月.カスの数; 整数++) {
+				札一覧.push({ id: `${月.月}カス${整数}`, 月: 月.月, 種別: 'カス' as 札種別, カス番号: 整数 });
 			}
 		}
 	}
-	return cards;
+	return 札一覧;
 }
 
